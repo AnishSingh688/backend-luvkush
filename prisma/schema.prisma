@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Program {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  date        String
+  location    String
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Donation {
+  id        String   @id @default(cuid())
+  gateway   String   // "khalti" or "esewa"
+  amount    Float
+  currency  String   @default("NPR")
+  payerName String?
+  payerEmail String?
+  payerPhone String?
+  meta      Json?    // Store additional payment metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Member {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  photoUrl    String?
+  bio         String?
+  showOnHome  Boolean  @default(false)
+  contributionAmount Float @default(0)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
