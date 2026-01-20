@@ -59,3 +59,15 @@ model Member {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model GalleryItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imageUrl    String
+  category    String   // "event" or "program"
+  eventDate   String?  // Optional: when the event/program occurred
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
