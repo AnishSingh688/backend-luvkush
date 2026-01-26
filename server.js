@@ -77,6 +77,16 @@ app.get("/api/payments/esewa/success", async (req, res) => {
 
     const ok = /Success/i.test(verify.data);
     if (ok) {
+      // Security: Check if this transaction was already processed
+      const existing = await prisma.donation.findFirst({
+        where: { meta: { path: ['rid'], equals: refId } }
+      });
+
+      if (existing) {
+        console.log(`Duplicate eSewa transaction attempt: ${refId}`);
+        return res.redirect(process.env.FRONTEND_SUCCESS_URL || "/paid?via=esewa");
+      }
+
       await prisma.donation.create({
         data: {
           gateway: "esewa",
